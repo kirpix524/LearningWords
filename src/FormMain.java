@@ -8,6 +8,10 @@ public class FormMain extends JFrame {
     private int height = 700; //todo get against the size of the screen
     private int startX = 30;  //todo get against the size of the screen
     private int startY = 30;  //todo get against the size of the screen
+    //
+    private JPanel jpBottomMenu;
+    private JPanel jpMainScreen;
+
 
     public FormMain() {
         setTitle("Изучение 100 иностранных слов в час");
@@ -15,12 +19,32 @@ public class FormMain extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
         setVisible(true);
+        //
+        initMenus();
+        showMainMenu();
     }
 
     private void initMenus() {
-        JPanel jpBottomMenu = getBottomMenu();
-        this.add(jpBottomMenu);
-
+        jpBottomMenu = getBottomMenu();
+        this.add(jpBottomMenu, BorderLayout.SOUTH);
+        //
+        JPanel jpMainMenu = getMainMenu();
+        jpBottomMenu.add(jpMainMenu, "jpMainMenu");
+        //
+        JPanel jpStartLearnMenu = getStartLearnMenu();
+        jpBottomMenu.add(jpStartLearnMenu, "jpStartLearnMenu");
+        //
+        JPanel jpStepLearnMenu = getStepLearnMenu();
+        jpBottomMenu.add(jpStepLearnMenu, "jpStepLearnMenu");
+        //
+        JPanel jpStartRepeatMenu = getStartRepeatMenu();
+        jpBottomMenu.add(jpStartRepeatMenu, "jpStartRepeatMenu");
+        //
+        JPanel jpStepRepeatMenu = getStepRepeatMenu();
+        jpBottomMenu.add(jpStepRepeatMenu, "jpStepRepeatMenu");
+        //
+        jpMainScreen = new JPanel();
+        this.add(jpMainScreen, BorderLayout.CENTER);
     }
 
     private JPanel getBottomMenu() {
@@ -34,19 +58,19 @@ public class FormMain extends JFrame {
         //Button start learning
         JButton jbStartLearning = new JButton("Изучение новых слов");
         jbStartLearning.addActionListener(e -> {
-
+            showStartLearn();
         });
         jpMainMenu.add(jbStartLearning);
         //Button start repeating
         JButton jbStartRepeating = new JButton("Повторение изученных");
         jbStartRepeating.addActionListener(e -> {
-
+            showStartRepeat();
         });
         jpMainMenu.add(jbStartRepeating);
         //Button Exit
-        JButton jbExitToMainMenu = new JButton("Выйти в основное меню");
+        JButton jbExitToMainMenu = new JButton("Выход");
         jbExitToMainMenu.addActionListener(e -> {
-            showMainMenu();
+            System.exit(0);
         });
         jpMainMenu.add(jbExitToMainMenu);
         return jpMainMenu;
@@ -55,43 +79,98 @@ public class FormMain extends JFrame {
     private JPanel getStartLearnMenu() {
         JPanel jpStartLearnMenu = new JPanel(new GridLayout());
         //Button Start
-
+        JButton jbStartLearn = new JButton("Начать");
+        jbStartLearn.addActionListener(e -> {
+            showStepLearn();
+        });
+        jpStartLearnMenu.add(jbStartLearn);
         //Button MainMenu
-
+        JButton jbMainMenu = new JButton("Вернуться в основное меню");
+        jbMainMenu.addActionListener(e -> {
+            showMainMenu();
+        });
+        jpStartLearnMenu.add(jbMainMenu);
         return jpStartLearnMenu;
     }
 
     private JPanel getStepLearnMenu() {
         JPanel jpStepLearnMenu = new JPanel(new GridLayout());
         //Button Pass
+        JButton jbPass = new JButton("Пропустить");
+        jbPass.addActionListener(e -> {
 
+        });
+        jpStepLearnMenu.add(jbPass);
         //Button Remembered
+        JButton jbRemembered = new JButton("Запомнил");
+        jbRemembered.addActionListener(e -> {
 
+        });
+        jpStepLearnMenu.add(jbRemembered);
         //Button StopLearning
-
+        JButton jbStopLearning = new JButton("Закончить изучение слов");
+        jbStopLearning.addActionListener(e -> {
+            showStartLearn();
+        });
+        jpStepLearnMenu.add(jbStopLearning);
         return jpStepLearnMenu;
     }
 
     private JPanel getStartRepeatMenu() {
         JPanel jpStartRepeatMenu = new JPanel(new GridLayout());
         //Button MainMenu
-
+        JButton jbMainMenu = new JButton("Вернуться в основное меню");
+        jbMainMenu.addActionListener(e -> {
+            showMainMenu();
+        });
+        jpStartRepeatMenu.add(jbMainMenu);
         return jpStartRepeatMenu;
     }
 
     private JPanel getStepRepeatMenu() {
         JPanel jpStepRepeatMenu = new JPanel(new GridLayout());
         //Button Remembered
+        JButton jbRemembered = new JButton("Вспомнил");
+        jbRemembered.addActionListener(e -> {
 
+        });
+        jpStepRepeatMenu.add(jbRemembered);
         //Button NotRemembered
+        JButton jbNotRemembered = new JButton("Не вспомнил");
+        jbNotRemembered.addActionListener(e -> {
 
+        });
+        jpStepRepeatMenu.add(jbNotRemembered);
         //Button FinishRepeating
-
+        JButton jbFinishRepeating = new JButton("Закончить повторение");
+        jbFinishRepeating.addActionListener(e -> {
+            showStartRepeat();
+        });
         return jpStepRepeatMenu;
     }
 
     private void showMainMenu() {
-
+        jpMainScreen.setBackground(new Color(100, 100, 100));
+        ((CardLayout) jpBottomMenu.getLayout()).show(jpBottomMenu, "jpMainMenu");
     }
 
+    private void showStartLearn() {
+        jpMainScreen.setBackground(new Color(110, 110, 110));
+        ((CardLayout) jpBottomMenu.getLayout()).show(jpBottomMenu, "jpStartLearnMenu");
+    }
+
+    private void showStepLearn() {
+        jpMainScreen.setBackground(new Color(120, 120, 120));
+        ((CardLayout) jpBottomMenu.getLayout()).show(jpBottomMenu, "jpStepLearnMenu");
+    }
+
+    private void showStartRepeat() {
+        jpMainScreen.setBackground(new Color(120, 120, 120));
+        ((CardLayout) jpBottomMenu.getLayout()).show(jpBottomMenu, "jpStartRepeatMenu");
+    }
+
+    private void showStepRepeat() {
+        jpMainScreen.setBackground(new Color(130, 130, 130));
+        ((CardLayout) jpBottomMenu.getLayout()).show(jpBottomMenu, "jpStepRepeatMenu");
+    }
 }
