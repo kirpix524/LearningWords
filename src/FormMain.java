@@ -10,7 +10,7 @@ public class FormMain extends JFrame {
     private int startY = 30;  //todo get against the size of the screen
     //
     private JPanel jpBottomMenu;
-    private JPanel jpMainScreen;
+    private MainScreen jpMainScreen;
 
 
     public FormMain() {
@@ -43,7 +43,7 @@ public class FormMain extends JFrame {
         JPanel jpStepRepeatMenu = getStepRepeatMenu();
         jpBottomMenu.add(jpStepRepeatMenu, "jpStepRepeatMenu");
         //
-        jpMainScreen = new JPanel();
+        jpMainScreen = new MainScreen();
         this.add(jpMainScreen, BorderLayout.CENTER);
     }
 
@@ -150,27 +150,27 @@ public class FormMain extends JFrame {
     }
 
     private void showMainMenu() {
-        jpMainScreen.setBackground(new Color(100, 100, 100));
+        jpMainScreen.changeState(MainScreen.States.STARTSCREEN);
         ((CardLayout) jpBottomMenu.getLayout()).show(jpBottomMenu, "jpMainMenu");
     }
 
     private void showStartLearn() {
-        jpMainScreen.setBackground(new Color(110, 110, 110));
+        jpMainScreen.changeState(MainScreen.States.STARTLEARN);
         ((CardLayout) jpBottomMenu.getLayout()).show(jpBottomMenu, "jpStartLearnMenu");
     }
 
     private void showStepLearn() {
-        jpMainScreen.setBackground(new Color(120, 120, 120));
+        jpMainScreen.changeState(MainScreen.States.STEPLEARN);
         ((CardLayout) jpBottomMenu.getLayout()).show(jpBottomMenu, "jpStepLearnMenu");
     }
 
     private void showStartRepeat() {
-        jpMainScreen.setBackground(new Color(120, 120, 120));
+        jpMainScreen.changeState(MainScreen.States.STARTREPEAT);
         ((CardLayout) jpBottomMenu.getLayout()).show(jpBottomMenu, "jpStartRepeatMenu");
     }
 
     private void showStepRepeat() {
-        jpMainScreen.setBackground(new Color(130, 130, 130));
+        jpMainScreen.changeState(MainScreen.States.STEPREPEAT);
         ((CardLayout) jpBottomMenu.getLayout()).show(jpBottomMenu, "jpStepRepeatMenu");
     }
 }
