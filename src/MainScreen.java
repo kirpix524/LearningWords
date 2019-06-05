@@ -1,3 +1,5 @@
+import com.sun.management.VMOption;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -12,23 +14,46 @@ public class MainScreen extends JPanel {
 
     private States state;
 
+    private Vocabulary vocabulary;
+
     public MainScreen() {
         state = null;
         setBackground(new Color(220, 220, 220));
     }
 
-    private void update() {
-
+    public void loadVocabulary() {
+        vocabulary = new Vocabulary();
+        vocabulary.addWord("word", "слово");
+        vocabulary.addWord("house", "дом (здание)");
+        vocabulary.addWord("love", "любовь");
     }
 
-    private void render() {
+    public void startStudying(int wordsToLearn) {
+        vocabulary.startStudying(wordsToLearn);
+        changeState(States.STEPLEARN);
+        vocabulary.nextWord();
         repaint();
     }
 
+
     public void changeState(States newState) {
         state = newState;
-        update();
-        render();
+        repaint();
+    }
+
+    public void passCurrentWord() {
+        vocabulary.nextWord();
+        repaint();
+    }
+
+    public void studyCurrentWord() {
+        vocabulary.studiedWord(vocabulary.getCurrentWord());
+        vocabulary.nextWord();
+        repaint();
+    }
+
+    public boolean studiedEnough() {
+        return vocabulary.studiedEnough();
     }
 
     @Override
@@ -42,6 +67,7 @@ public class MainScreen extends JPanel {
             case STARTLEARN:
                 break;
             case STEPLEARN:
+                drawCard(vocabulary.getCurrentWord(), g);
                 break;
             case STARTREPEAT:
                 break;
@@ -51,5 +77,13 @@ public class MainScreen extends JPanel {
                 break;
         }
 
+    }
+
+    private void drawCard(Word word, Graphics g) {
+        int x = 100, y = 200;
+        g.drawRoundRect(x, y, 400, 250, 10, 10);
+        g.setFont(new Font("Times New Roman", Font.PLAIN, 28));
+        g.drawString(word.getWord(), x + 20, y + 50);
+        g.drawString(word.getTranslation(), x + 200, y + 150);
     }
 }

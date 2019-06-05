@@ -11,7 +11,7 @@ public class FormMain extends JFrame {
     //
     private JPanel jpBottomMenu;
     private MainScreen jpMainScreen;
-
+    //
 
     public FormMain() {
         setTitle("Изучение 100 иностранных слов в час");
@@ -21,6 +21,7 @@ public class FormMain extends JFrame {
         setVisible(true);
         //
         initMenus();
+        jpMainScreen.loadVocabulary();
         showMainMenu();
     }
 
@@ -98,13 +99,16 @@ public class FormMain extends JFrame {
         //Button Pass
         JButton jbPass = new JButton("Пропустить");
         jbPass.addActionListener(e -> {
-
+            jpMainScreen.passCurrentWord();
         });
         jpStepLearnMenu.add(jbPass);
         //Button Remembered
         JButton jbRemembered = new JButton("Запомнил");
         jbRemembered.addActionListener(e -> {
-
+            jpMainScreen.studyCurrentWord();
+            if (jpMainScreen.studiedEnough()) {
+                showStartLearn();
+            }
         });
         jpStepLearnMenu.add(jbRemembered);
         //Button StopLearning
@@ -161,6 +165,7 @@ public class FormMain extends JFrame {
 
     private void showStepLearn() {
         jpMainScreen.changeState(MainScreen.States.STEPLEARN);
+        jpMainScreen.startStudying(3);
         ((CardLayout) jpBottomMenu.getLayout()).show(jpBottomMenu, "jpStepLearnMenu");
     }
 
