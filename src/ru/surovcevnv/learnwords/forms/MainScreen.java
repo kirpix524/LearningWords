@@ -1,34 +1,68 @@
 package ru.surovcevnv.learnwords.forms;
 
 import com.sun.management.VMOption;
+import ru.surovcevnv.learnwords.classes.CircleTimer;
 import ru.surovcevnv.learnwords.classes.Vocabulary;
 import ru.surovcevnv.learnwords.classes.Word;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class MainScreen extends JPanel {
     private FormMain formMain;
+    private static long REFRESH_TIME = 100;
+    private static String DATE_TIME_FORMAT = "dd.MM HH:mm:ss";
+    private static Color BACKGROUND = new Color(220, 220, 220);
 
     private FormMain.States state;
+
+    public CircleTimer timer;
+
+    private class EventGenerator extends Thread {
+        JPanel form;
+        EventGenerator(JPanel form) {
+            this.form = form;
+            start();
+        }
+
+        @Override
+        public void run() {
+            while (!isInterrupted()) {
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        form.repaint();
+                    }
+                });
+                try {
+                    sleep(REFRESH_TIME);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
 
 
     public MainScreen(FormMain formMain) {
         this.formMain = formMain;
-        setBackground(new Color(220, 220, 220));
+        setBackground(BACKGROUND);
+        new EventGenerator(this);
+        timer = new CircleTimer(900,100,70,70,60000, new Color(0,150,0));
     }
 
-    private void update() {
-
-    }
-
-    private void render() {
-
-    }
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        g.setFont(new Font("Times New Roman", Font.PLAIN, 12));
+        g.drawString(new SimpleDateFormat(DATE_TIME_FORMAT).format(new Date()), 20, 10);
+        if (timer.isVisible()) {
+            timer.draw(g);
+        }
+
         FormMain.States state = formMain.getCurrentState();
         switch (state) {
             case STARTSCREEN:

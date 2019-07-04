@@ -37,6 +37,8 @@ public class FormMain extends JFrame {
         setResizable(false);
         setVisible(true);
         //
+        jpMainScreen = new MainScreen(this);
+        this.add(jpMainScreen, BorderLayout.CENTER);
         initMenus();
         loadVocabulary();
         showMainMenu();
@@ -58,6 +60,8 @@ public class FormMain extends JFrame {
         vocabulary.startStudying(wordsToLearn);
         changeState(States.STEPLEARN);
         vocabulary.nextWord();
+        jpMainScreen.timer.setVisible(true);
+        jpMainScreen.timer.reset(20000);
         repaint();
     }
 
@@ -68,12 +72,14 @@ public class FormMain extends JFrame {
 
     public void passCurrentWord() {
         vocabulary.nextWord();
+        jpMainScreen.timer.reset(20000);
         repaint();
     }
 
     public void studyCurrentWord() {
         vocabulary.studiedWord(vocabulary.getCurrentWord());
         vocabulary.nextWord();
+        jpMainScreen.timer.reset(20000);
         repaint();
     }
 
@@ -101,8 +107,6 @@ public class FormMain extends JFrame {
         JPanel jpStepRepeatMenu = getStepRepeatMenu();
         jpBottomMenu.add(jpStepRepeatMenu, "jpStepRepeatMenu");
         //
-        jpMainScreen = new MainScreen(this);
-        this.add(jpMainScreen, BorderLayout.CENTER);
     }
 
     private JPanel getBottomMenu() {
@@ -216,6 +220,8 @@ public class FormMain extends JFrame {
     }
 
     private void showStartLearn() {
+        jpMainScreen.timer.stop();
+        jpMainScreen.timer.setVisible(false);
         changeState(States.STARTLEARN);
         ((CardLayout) jpBottomMenu.getLayout()).show(jpBottomMenu, "jpStartLearnMenu");
     }
