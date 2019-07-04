@@ -1,3 +1,7 @@
+package ru.surovcevnv.learnwords;
+
+import ru.surovcevnv.learnwords.forms.MainScreen;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
