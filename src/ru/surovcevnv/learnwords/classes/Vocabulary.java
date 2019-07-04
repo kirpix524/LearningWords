@@ -1,3 +1,5 @@
+package ru.surovcevnv.learnwords.classes;
+
 import java.rmi.server.UID;
 import java.util.*;
 

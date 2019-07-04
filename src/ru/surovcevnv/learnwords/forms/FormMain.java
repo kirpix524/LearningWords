@@ -1,5 +1,6 @@
-package ru.surovcevnv.learnwords;
+package ru.surovcevnv.learnwords.forms;
 
+import ru.surovcevnv.learnwords.classes.Vocabulary;
 import ru.surovcevnv.learnwords.forms.MainScreen;
 
 import javax.swing.*;
@@ -16,6 +17,18 @@ public class FormMain extends JFrame {
     private JPanel jpBottomMenu;
     private MainScreen jpMainScreen;
     //
+    Vocabulary vocabulary;
+    //
+    public enum States {
+        STARTSCREEN,
+        STARTLEARN,
+        STEPLEARN,
+        STARTREPEAT,
+        STEPREPEAT
+    }
+    //
+    private States state;
+    //
 
     public FormMain() {
         setTitle("Изучение 100 иностранных слов в час");
@@ -25,10 +38,50 @@ public class FormMain extends JFrame {
         setVisible(true);
         //
         initMenus();
-        jpMainScreen.loadVocabulary();
+        loadVocabulary();
         showMainMenu();
     }
 
+
+    //
+
+
+
+    public void loadVocabulary() {
+        vocabulary = new Vocabulary();
+        vocabulary.addWord("word", "слово");
+        vocabulary.addWord("house", "дом (здание)");
+        vocabulary.addWord("love", "любовь");
+    }
+
+    public void startStudying(int wordsToLearn) {
+        vocabulary.startStudying(wordsToLearn);
+        changeState(States.STEPLEARN);
+        vocabulary.nextWord();
+        repaint();
+    }
+
+    public void changeState(States newState) {
+        state = newState;
+        repaint();
+    }
+
+    public void passCurrentWord() {
+        vocabulary.nextWord();
+        repaint();
+    }
+
+    public void studyCurrentWord() {
+        vocabulary.studiedWord(vocabulary.getCurrentWord());
+        vocabulary.nextWord();
+        repaint();
+    }
+
+    public boolean studiedEnough() {
+        return vocabulary.studiedEnough();
+    }
+
+    //<editor-fold desc="menus region">
     private void initMenus() {
         jpBottomMenu = getBottomMenu();
         this.add(jpBottomMenu, BorderLayout.SOUTH);
@@ -48,7 +101,7 @@ public class FormMain extends JFrame {
         JPanel jpStepRepeatMenu = getStepRepeatMenu();
         jpBottomMenu.add(jpStepRepeatMenu, "jpStepRepeatMenu");
         //
-        jpMainScreen = new MainScreen();
+        jpMainScreen = new MainScreen(this);
         this.add(jpMainScreen, BorderLayout.CENTER);
     }
 
@@ -103,14 +156,14 @@ public class FormMain extends JFrame {
         //Button Pass
         JButton jbPass = new JButton("Пропустить");
         jbPass.addActionListener(e -> {
-            jpMainScreen.passCurrentWord();
+            passCurrentWord();
         });
         jpStepLearnMenu.add(jbPass);
         //Button Remembered
         JButton jbRemembered = new JButton("Запомнил");
         jbRemembered.addActionListener(e -> {
-            jpMainScreen.studyCurrentWord();
-            if (jpMainScreen.studiedEnough()) {
+            studyCurrentWord();
+            if (studiedEnough()) {
                 showStartLearn();
             }
         });
@@ -158,28 +211,34 @@ public class FormMain extends JFrame {
     }
 
     private void showMainMenu() {
-        jpMainScreen.changeState(MainScreen.States.STARTSCREEN);
+        changeState(States.STARTSCREEN);
         ((CardLayout) jpBottomMenu.getLayout()).show(jpBottomMenu, "jpMainMenu");
     }
 
     private void showStartLearn() {
-        jpMainScreen.changeState(MainScreen.States.STARTLEARN);
+        changeState(States.STARTLEARN);
         ((CardLayout) jpBottomMenu.getLayout()).show(jpBottomMenu, "jpStartLearnMenu");
     }
 
     private void showStepLearn() {
-        jpMainScreen.changeState(MainScreen.States.STEPLEARN);
-        jpMainScreen.startStudying(3);
+        changeState(States.STEPLEARN);
+        startStudying(3);
         ((CardLayout) jpBottomMenu.getLayout()).show(jpBottomMenu, "jpStepLearnMenu");
     }
 
     private void showStartRepeat() {
-        jpMainScreen.changeState(MainScreen.States.STARTREPEAT);
+        changeState(States.STARTREPEAT);
         ((CardLayout) jpBottomMenu.getLayout()).show(jpBottomMenu, "jpStartRepeatMenu");
     }
 
     private void showStepRepeat() {
-        jpMainScreen.changeState(MainScreen.States.STEPREPEAT);
+        changeState(States.STEPREPEAT);
         ((CardLayout) jpBottomMenu.getLayout()).show(jpBottomMenu, "jpStepRepeatMenu");
+    }
+
+    //</editor-fold>
+
+    public States getCurrentState() {
+        return state;
     }
 }

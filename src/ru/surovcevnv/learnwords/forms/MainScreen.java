@@ -1,64 +1,35 @@
+package ru.surovcevnv.learnwords.forms;
+
 import com.sun.management.VMOption;
+import ru.surovcevnv.learnwords.classes.Vocabulary;
+import ru.surovcevnv.learnwords.classes.Word;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class MainScreen extends JPanel {
-    public enum States {
-        STARTSCREEN,
-        STARTLEARN,
-        STEPLEARN,
-        STARTREPEAT,
-        STEPREPEAT
-    }
+    private FormMain formMain;
 
-    private States state;
+    private FormMain.States state;
 
-    private Vocabulary vocabulary;
 
-    public MainScreen() {
-        state = null;
+
+    public MainScreen(FormMain formMain) {
+        this.formMain = formMain;
         setBackground(new Color(220, 220, 220));
     }
 
-    public void loadVocabulary() {
-        vocabulary = new Vocabulary();
-        vocabulary.addWord("word", "слово");
-        vocabulary.addWord("house", "дом (здание)");
-        vocabulary.addWord("love", "любовь");
+    private void update() {
+
     }
 
-    public void startStudying(int wordsToLearn) {
-        vocabulary.startStudying(wordsToLearn);
-        changeState(States.STEPLEARN);
-        vocabulary.nextWord();
-        repaint();
+    private void render() {
+
     }
-
-
-    public void changeState(States newState) {
-        state = newState;
-        repaint();
-    }
-
-    public void passCurrentWord() {
-        vocabulary.nextWord();
-        repaint();
-    }
-
-    public void studyCurrentWord() {
-        vocabulary.studiedWord(vocabulary.getCurrentWord());
-        vocabulary.nextWord();
-        repaint();
-    }
-
-    public boolean studiedEnough() {
-        return vocabulary.studiedEnough();
-    }
-
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        FormMain.States state = formMain.getCurrentState();
         switch (state) {
             case STARTSCREEN:
                 g.setFont(new Font("Times New Roman", Font.PLAIN, 48));
@@ -67,7 +38,7 @@ public class MainScreen extends JPanel {
             case STARTLEARN:
                 break;
             case STEPLEARN:
-                drawCard(vocabulary.getCurrentWord(), g);
+                drawCard(formMain.vocabulary.getCurrentWord(), g);
                 break;
             case STARTREPEAT:
                 break;
